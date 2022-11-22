@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from time import time
 
+img =cv2.imread('GoAB.jpg',0)
 
 class CardDetection:
     """
@@ -78,7 +79,7 @@ class CardDetection:
                 cv2.rectangle(frame, (x1+100, y1+100), (x2+100, y2+100), bgr, 2)
                 cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
                 cv2.line(frame, (0, 0), (0, 200), bgr, 2)
-                # cv2.imshow()
+                cv2.imshow('image',frame)
 
         return frame
 
