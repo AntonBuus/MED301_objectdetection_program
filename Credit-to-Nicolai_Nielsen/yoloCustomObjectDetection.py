@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from time import time
 
-img =cv2.imread('GoAB.jpg',0)
+# img =cv2.imread('GoAB.jpg',0)
 
 class CardDetection:
     """
@@ -73,13 +73,20 @@ class CardDetection:
         x_shape, y_shape = frame.shape[1], frame.shape[0]
         for i in range(n):
             row = cord[i]
-            if row[4] >= 0.3:
+            if row[4] >= 0.1:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (255, 0, 0)
-                cv2.rectangle(frame, (x1+100, y1+100), (x2+100, y2+100), bgr, 2)
+                
+                # img = frame
+                # cv2.im
+                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+                cv2.rectangle(frame, (x1+400, y1+50), (x2+400, y2), bgr, 2)
+                cv2.line(frame, (x1+400, y1+150), (x2, y2-200), bgr, 2)
                 cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
-                cv2.line(frame, (0, 0), (0, 200), bgr, 2)
-                cv2.imshow('image',frame)
+
+                # cv2.line(frame, (0, 0), (0, 200), bgr, 2)
+                # cv2.imshow('image',frame)
+                # cv2.imshow(1)
 
         return frame
 
@@ -91,16 +98,19 @@ class CardDetection:
         """
         cap = self.get_video_capture()
         assert cap.isOpened()
+        windowsize = 832
       
         while True:
-          
+        
             ret, frame = cap.read()
             assert ret
             
-            frame = cv2.resize(frame, (416,416))
+            # frame = cv2.resize(frame, (416,416))
+            frame = cv2.resize(frame, (windowsize, windowsize))
             
             start_time = time()
             results = self.score_frame(frame)
+            cv2.rectangle(frame, (0,0),(windowsize,windowsize), (0,0,0),-1)
             frame = self.plot_boxes(results, frame)
             
             end_time = time()
@@ -118,5 +128,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=1, model_name='best.pt')
+detector = CardDetection(capture_index=1, model_name='Supergood.pt')
 detector()
