@@ -2,8 +2,10 @@ import torch
 import numpy as np
 import cv2
 from time import time
+from PIL import Image
 
-# img =cv2.imread('GoAB.jpg',0)
+img =cv2.imread('GoAB.jpg',0)
+img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
 
 class CardDetection:
     """
@@ -27,8 +29,14 @@ class CardDetection:
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-      
-        return cv2.VideoCapture(self.capture_index)
+        global kamera 
+        kamera = cv2.VideoCapture(self.capture_index)
+        return kamera
+
+   #def rotate_camera(self):
+       # global r_cam
+        #r_cam = cv2.rotate(kamera, cv2.cv2.ROTATE_90_CLOCKWISE)
+        #return r_cam
 
     def load_model(self, model_name):
         """
@@ -78,14 +86,16 @@ class CardDetection:
                 bgr = (255, 0, 0)
                 
                 # img = frame
-                # cv2.im
+                
                 cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
-                cv2.rectangle(frame, (x1+400, y1+50), (x2+400, y2), bgr, 2)
-                cv2.line(frame, (x1+400, y1+150), (x2, y2-200), bgr, 2)
+                # cv2.rectangle(frame, (x1+400, y1+50), (x2+400, y2), bgr, 2)
+                # imgframe = Image.open(frame)
+                # imgframe.paste(img1, (x2+400, y2))
+                # cv2.line(frame, (x1+400, y1+150), (x2, y2-200), bgr, 2)
                 cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
 
                 # cv2.line(frame, (0, 0), (0, 200), bgr, 2)
-                # cv2.imshow('image',frame)
+                # cv2.imshow('image',img)
                 # cv2.imshow(1)
 
         return frame
@@ -106,11 +116,11 @@ class CardDetection:
             assert ret
             
             # frame = cv2.resize(frame, (416,416))
-            frame = cv2.resize(frame, (windowsize, windowsize))
+            #frame = cv2.resize(frame, (windowsize, windowsize))
             
             start_time = time()
             results = self.score_frame(frame)
-            cv2.rectangle(frame, (0,0),(windowsize,windowsize), (0,0,0),-1)
+            cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             frame = self.plot_boxes(results, frame)
             
             end_time = time()
@@ -128,5 +138,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=1, model_name='Supergood.pt')
+detector = CardDetection(capture_index=0, model_name='Supergood.pt')
 detector()
