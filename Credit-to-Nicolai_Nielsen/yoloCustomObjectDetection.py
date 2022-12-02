@@ -120,6 +120,7 @@ class CardDetection:
             
             start_time = time()
             results = self.score_frame(frame)
+            cv2.imshow('Normalt kamera', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             frame = self.plot_boxes(results, frame)
             
