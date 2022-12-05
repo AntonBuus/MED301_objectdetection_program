@@ -4,8 +4,8 @@ import cv2
 from time import time
 from PIL import Image
 
-img =cv2.imread('GoAB.jpg',0)
-img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
+# img =cv2.imread('GoAB.jpg',0)
+# img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
 
 class CardDetection:
     """
@@ -83,16 +83,16 @@ class CardDetection:
             row = cord[i]
             if row[4] >= 0.1:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
-                bgr = (255, 0, 0)
+                bgr = (255, 255, 0)
                 
                 # img = frame
                 
-                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+                cv2.rectangle(frame, (x1+50, y1-100), (x2+200, y2+200), bgr, 2)
                 # cv2.rectangle(frame, (x1+400, y1+50), (x2+400, y2), bgr, 2)
                 # imgframe = Image.open(frame)
                 # imgframe.paste(img1, (x2+400, y2))
                 # cv2.line(frame, (x1+400, y1+150), (x2, y2-200), bgr, 2)
-                cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
+                # cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
 
                 # cv2.line(frame, (0, 0), (0, 200), bgr, 2)
                 # cv2.imshow('image',img)
@@ -116,7 +116,8 @@ class CardDetection:
             assert ret
             
             # frame = cv2.resize(frame, (416,416))
-            #frame = cv2.resize(frame, (windowsize, windowsize))
+            # frame = cv2.resize(frame, (windowsize, windowsize))
+            frame = cv2.resize(frame, (1920,1080))
             
             start_time = time()
             results = self.score_frame(frame)
@@ -139,5 +140,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=0, model_name='Supergood.pt')
+detector = CardDetection(capture_index=1, model_name='Supergood.pt')
 detector()
