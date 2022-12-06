@@ -82,7 +82,7 @@ class CardDetection:
         size = 100
         logo = cv2.resize(logo, (size, size))
         img2gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY)
-        ret, mask = cv2.threshold(img2gray, 1, 255, cv2.THRESH_BINARY)
+        mask = cv2.threshold(img2gray, 1, 255, cv2.THRESH_BINARY)
 
         labels, cord = results
         n = len(labels)
