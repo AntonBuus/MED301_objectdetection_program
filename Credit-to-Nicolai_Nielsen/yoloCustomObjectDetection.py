@@ -91,7 +91,7 @@ class CardDetection:
                 
                 standardFrame = cv2.rectangle(frame, (x1+50, y1-100), (x2+200, y2+200), bgr, 2)
                 standardFrame
-                cv2.line(frame, (x1+250, y1+100), (x2+400, y2+100), bgr, 2)
+                # cv2.line(frame, (x1+250, y1+100), (x2+400, y2+100), bgr, 2)
                 if self.class_to_label(labels[i]) == "AS":
                     cv2.rectangle(frame, (x1+400, y1-100), (x2+600, y2-100), bgr, 2)
                     cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
@@ -134,7 +134,7 @@ class CardDetection:
             
             # frame = cv2.resize(frame, (416,416))
             # frame = cv2.resize(frame, (windowsize, windowsize))
-            frame = cv2.resize(frame, (1920,1080))
+            frame = cv2.resize(frame, (1200,800))
             
             start_time = time()
             results = self.score_frame(frame)

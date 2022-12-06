@@ -141,6 +141,9 @@ class CardDetection:
             if length == 0:
                 self.draw_label(frame, self.scan_card, (self.pos), (self.color))
             
+            elif length == 1:
+                self.draw_label(frame, "Placer et kort mere", (self.pos), (self.color))
+            
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
             
