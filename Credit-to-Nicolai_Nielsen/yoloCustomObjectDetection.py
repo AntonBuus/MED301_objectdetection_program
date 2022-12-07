@@ -2,7 +2,10 @@ import torch
 import numpy as np
 import cv2
 from time import time
-# from WriteCardInfo import*
+from PIL import Image
+
+# img =cv2.imread('GoAB.jpg',0)
+# img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
 
 class CardDetection:
     """
@@ -66,12 +69,6 @@ class CardDetection:
         """
         return self.classes[int(x)]
 
-    # def write_info(frame, x1, y1, bgr):
-    #     cv2.putText(frame, "Lorem ipsum dolor sit", (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-    #     cv2.putText(frame, "Lorem ipsum dolor sit", (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-    #     cv2.putText(frame, "Lorem ipsum dolor sit", (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-
-
     def plot_boxes(self, results, frame):
         """
         Takes a frame and its results as input, and plots the bounding boxes and label on to the frame.
@@ -88,33 +85,19 @@ class CardDetection:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (255, 255, 0)
                 
+                # img = frame
                 
-                standardFrame = cv2.rectangle(frame, (x1+50, y1-100), (x2+200, y2+200), bgr, 2)
-                standardFrame
-                # cv2.line(frame, (x1+250, y1+100), (x2+400, y2+100), bgr, 2)
-                if self.class_to_label(labels[i]) == "AS":
-                    cv2.rectangle(frame, (x1+400, y1-100), (x2+600, y2-100), bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-
-                    cv2.rectangle(frame, (x1-400, y1+100), (x2-200, y2+100), bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+145), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+160), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    
-                
-                
-                # cv2.putText(frame, """Lorem ipsum dolor sit amet\n
-
-                # Lorem ipsum dolor sit amet \n
-
-                # Lorem ipsum dolor sit amet""", (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                # write_info(frame, x1, y1, bgr)
-                cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+                # cv2.rectangle(frame, (x1+400, y1+50), (x2+400, y2), bgr, 2)
+                # imgframe = Image.open(frame)
+                # imgframe.paste(img1, (x2+400, y2))
+                # cv2.line(frame, (x1+400, y1+150), (x2, y2-200), bgr, 2)
+                # cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
 
                 # cv2.line(frame, (0, 0), (0, 200), bgr, 2)
-                
+                # cv2.imshow('image',img)
+                # cv2.imshow(1)
+
         return frame
 
     def __call__(self):
@@ -134,7 +117,7 @@ class CardDetection:
             
             # frame = cv2.resize(frame, (416,416))
             # frame = cv2.resize(frame, (windowsize, windowsize))
-            frame = cv2.resize(frame, (1200,800))
+            frame = cv2.resize(frame, (1920,1080))
             
             start_time = time()
             results = self.score_frame(frame)

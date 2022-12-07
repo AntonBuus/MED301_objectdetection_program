@@ -20,7 +20,7 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
-        self.correct_answers = [["6S", "10C"], ["7H", "QD"],["3D", "5C"]]
+        self.correct_answers = [["AC", "10S"], ["10C", "8S"],["9C", "7S"]]
         
 
     def get_video_capture(self):
@@ -128,9 +128,11 @@ class CardDetection:
             ret, frame = cap.read()
             assert ret
             
+            frame = cv2.resize(frame, (1920,1080))
             
             #start_time = time()
             results = self.score_frame(frame)
+            cv2.imshow('Normalt kamera', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             
             
