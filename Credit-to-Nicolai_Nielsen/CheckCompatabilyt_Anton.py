@@ -20,8 +20,9 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
-        self.correct_answers = [["6S", "10C"], ["7H", "QD"],["3D", "5C"],]
-        
+        self.correct_answers = [["AC", "10S"],["AC", "QS"],["4C","QS"],["KC","QS"],["4C","QS"],["KC","QS", "10S"], ["AC","KC","10S"],["AC","KC","QS","10S"],['AC', 'QS', '10S'],['AC', 'QS', '8D', '10S'],['QS', 'AC', '8D', 'KC'],['QS', 'AC', 'KC'],['AC', 'QS', '8D'],['AC', 'QS', '10S'],['QS', 'AC', '10S', '8D', 'KC'],
+                                ["10C", "8S"],
+                                ["9C", "7S"],["9S", "7S"],["9S", "7S","AS"],["9C", "7S"],["QS", "7S"],["QS", "7S","JS"],["9S", "JS"],["9S", "JS","7S"],]
 
     def get_video_capture(self):
         """
@@ -89,11 +90,12 @@ class CardDetection:
         x_shape, y_shape = frame.shape[1], frame.shape[0]
         for i in range(n):
             row = cord[i]
-            if row[4] >= 0.3:
+            if row[4] >= 0.5:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
-                bgr = (255, 255, 0)
+                bgr = (0, 0, 0)
+                LabelFarve = (50, 50, 0)
                 cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
-                cv2.putText(frame, self.class_to_label(labels[i]), (x1+600, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
+                cv2.putText(frame, self.class_to_label(labels[i]), (x1+600, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, LabelFarve, 2)
                 
                 self.detections.append(self.class_to_label(labels[i]))
                 
@@ -117,7 +119,7 @@ class CardDetection:
         self.scan_card = "Placer to kort i rammen, for at begynde"
         self.color = 255,0,0
 
-        self.pos =  150,150
+        self.pos =  30,30
         
         
         cap = self.get_video_capture()
@@ -132,19 +134,27 @@ class CardDetection:
             #start_time = time()
             frame = cv2.resize(frame, (1200,900))
             results = self.score_frame(frame)
+            cv2.imshow('Normalt kamera', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             
             
             frame = self.plot_boxes(results, frame)
             
             length = len(self.detections)
-            
+            # for i in self.correct_answers:
+            #     print(i)
             if length == 0:
                 self.draw_label(frame, self.scan_card, (self.pos), (self.color))
             
             elif length == 1:
                 self.draw_label(frame, "Placer et kort mere", (self.pos), (self.color))
-            
+                
+
+                # elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[i]):
+                #     self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+                
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
             
@@ -153,10 +163,53 @@ class CardDetection:
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
-                
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[3]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[4]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[5]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[6]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[7]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[8]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[9]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[10]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[11]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[12]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[13]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[14]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[15]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[16]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+
             elif self.detections != self.correct_answers:
                 self.draw_label(frame, self.wrong, (self.pos), (0,8,247))
-            
+                print(self.detections)
+                
      #       else:
       #          self.draw_label(frame, self.scan_card, (self.pos), (0,8,247))
                 
