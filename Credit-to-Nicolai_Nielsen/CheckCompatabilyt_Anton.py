@@ -2,10 +2,7 @@ import torch
 import numpy as np
 import cv2
 from time import time
-from PIL import Image
-
-# img =cv2.imread('GoAB.jpg',0)
-# img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
+import collections
 
 class CardDetection:
     """
@@ -23,20 +20,16 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
+        self.correct_answers = [["6S", "10C"], ["7H", "QD"],["3D", "5C"],]
+        
 
     def get_video_capture(self):
         """
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-        global kamera 
-        kamera = cv2.VideoCapture(self.capture_index)
-        return kamera
-
-   #def rotate_camera(self):
-       # global r_cam
-        #r_cam = cv2.rotate(kamera, cv2.cv2.ROTATE_90_CLOCKWISE)
-        #return r_cam
+      
+        return cv2.VideoCapture(self.capture_index)
 
     def load_model(self, model_name):
         """
@@ -68,6 +61,20 @@ class CardDetection:
         :return: corresponding string label
         """
         return self.classes[int(x)]
+     
+    def draw_label(self, img, text, pos, bg_farve):
+        self.font_face = cv2.FONT_HERSHEY_TRIPLEX
+        self.scale = 1
+        self.farve = (0, 0, 0)
+        self.thickness = cv2.FILLED
+        self.margin = 20
+        self.txt_size = cv2.getTextSize(text, self.font_face, self.scale, self.thickness)
+
+        end_x = pos[0] + self.txt_size[0][0] + self.margin
+        end_y = pos[1] - self.txt_size[0][1] - self.margin
+
+        cv2.rectangle(img, pos, (end_x, end_y), bg_farve, self.thickness)
+        cv2.putText(img, text, pos, self.font_face, self.scale, self.farve, 1, cv2.LINE_AA)
 
     def plot_boxes(self, results, frame):
         """
@@ -76,6 +83,7 @@ class CardDetection:
         :param frame: Frame which has been scored.
         :return: Frame with bounding boxes and labels ploted on it.
         """
+        self.detections = [] 
         labels, cord = results
         n = len(labels)
         x_shape, y_shape = frame.shape[1], frame.shape[0]
@@ -84,38 +92,16 @@ class CardDetection:
             if row[4] >= 0.3:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (255, 255, 0)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+                cv2.putText(frame, self.class_to_label(labels[i]), (x1+600, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
                 
-                # img = frame
+                self.detections.append(self.class_to_label(labels[i]))
                 
-                # cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2) #unchanged box
-                cv2.rectangle(frame, (x1-100, y1-100), (x2+200, y2+200), bgr, 2)
-
-                
-                # cv2.line(frame, (x1+250, y1+100), (x2+400, y2+100), bgr, 2)
-                if self.class_to_label(labels[i]) == "AS":
-                    cv2.rectangle(frame, (x1+400, y1-100), (x2+600, y2+100), bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-
-                    cv2.rectangle(frame, (x1-400, y1+100), (x2-200, y2), bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+145), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+160), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
                     
-                
-                
-                # cv2.putText(frame, """Lorem ipsum dolor sit amet\n
-
-                # Lorem ipsum dolor sit amet \n
-
-                # Lorem ipsum dolor sit amet""", (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                # write_info(frame, x1, y1, bgr)
-                # cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
-
                 # cv2.line(frame, (0, 0), (0, 200), bgr, 2)
-                # cv2.imshow('image',img)
+                # cv2.imshow('image',frame)
                 # cv2.imshow(1)
+                # cv2.imshow("Image", frame)
 
         return frame
 
@@ -125,37 +111,68 @@ class CardDetection:
         and write the output into a new file.
         :return: void
         """
+        
+        self.correct = "Det er rigtigt!"
+        self.wrong = "Det er forkert :("
+        self.scan_card = "Placer to kort i rammen, for at begynde"
+        self.color = 255,0,0
+
+        self.pos =  150,150
+        
+        
         cap = self.get_video_capture()
         assert cap.isOpened()
-        windowsize = 832
       
         while True:
-        
+          
             ret, frame = cap.read()
             assert ret
             
-            # frame = cv2.resize(frame, (416,416))
-            # frame = cv2.resize(frame, (windowsize, windowsize))
-            frame = cv2.resize(frame, (1200,900)) #god skærmstørrelse
-            # frame = cv2.resize(frame, ())
             
-            start_time = time()
+            #start_time = time()
+            frame = cv2.resize(frame, (1200,900))
             results = self.score_frame(frame)
-            frame = self.plot_boxes(results, frame)
-            cv2.imshow('Normalt kamera', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
+            
+            
             frame = self.plot_boxes(results, frame)
             
-            end_time = time()
-            fps = 10/np.round(end_time - start_time, 2)
+            length = len(self.detections)
+            
+            if length == 0:
+                self.draw_label(frame, self.scan_card, (self.pos), (self.color))
+            
+            elif length == 1:
+                self.draw_label(frame, "Placer et kort mere", (self.pos), (self.color))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+            
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
+                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+                
+            elif self.detections != self.correct_answers:
+                self.draw_label(frame, self.wrong, (self.pos), (0,8,247))
+            
+     #       else:
+      #          self.draw_label(frame, self.scan_card, (self.pos), (0,8,247))
+                
+            
+            #end_time = time()
+            #fps = 10/np.round(end_time - start_time, 2)
             #print(f"Frames Per Second : {fps}")
              
-            cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+            #cv2.putText(frame, f'F5PS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
             
             cv2.imshow('YOLOv5 Detection', frame)
- 
-            if cv2.waitKey(5) & 0xFF == 27:
-                break
+            
+            if cv2.waitKey(1) & 0xFF == ord('p'):
+                 print(self.detections) 
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+             break
       
         cap.release()
         
