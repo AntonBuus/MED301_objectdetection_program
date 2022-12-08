@@ -6,6 +6,8 @@ from PIL import Image
 import collections
 import textwrap 
 
+#pipreqs Denne skal vi bruge, når vi til sidst skal generere en Requirements.txt fil. Lad Hamza tage sig af denne.
+
 
 # img =cv2.imread('GoAB.jpg',0)
 # img1 = Image.open(r"C:\GitHub\CardDetect\GoAB.jpg")
