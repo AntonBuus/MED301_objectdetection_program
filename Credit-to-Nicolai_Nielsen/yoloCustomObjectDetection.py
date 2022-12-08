@@ -4,6 +4,7 @@ import cv2
 from time import time
 from PIL import Image
 import collections
+import textwrap 
 
 
 # img =cv2.imread('GoAB.jpg',0)
@@ -81,6 +82,28 @@ class CardDetection:
 
         cv2.rectangle(img, pos, (end_x, end_y), bg_farve, self.thickness)
         cv2.putText(img, text, pos, self.font_face, self.scale, self.farve, 1, cv2.LINE_AA)
+
+    def wrappedtext(self, img, text, bg_farve):
+
+            wrapped_text = textwrap.wrap(text, width=80)
+            self.scale = 1
+            self.font_face = cv2.FONT_HERSHEY_TRIPLEX
+            self.thickness = 2
+            self.farve = (255,255,255)
+            self.bg_farve = bg_farve
+
+            x, y = 10, 40
+
+            for i, line in enumerate(wrapped_text):
+                self.textsize = cv2.getTextSize(line, self.font_face, self.scale, self.thickness)[0]
+                gap = self.textsize[1] + 10
+                y = int((img.shape[0] + self.textsize[1]) / 2) + i * gap
+                x = int((img.shape[1] - self.textsize[0]) / 2)
+
+                #cv2.rectangle(img, pos, (end_x, end_y), bg_farve, self.thickness, -1)
+
+                cv2.putText(img, line, (x,y-400), self.font_face, self.scale, self.farve, self.thickness, cv2.LINE_AA)
+
     
     def plot_boxes(self, results, frame):
         """
@@ -96,10 +119,11 @@ class CardDetection:
         for i in range(n):
             row = cord[i]
             if row[4] >= 0.83:
-                self.x1, self.y1, self.x2, self.y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
-                self.bgr = (255, 255, 0)
-                cv2.rectangle(frame, (self.x1, self.y1), (self.x2, self.y2), self.bgr, 2)
-                cv2.putText(frame, self.class_to_label(labels[i]), (self.x1, self.y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, self.bgr, 2)                
+                x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
+                bgr = (182, 0, 255)
+                #cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+                cv2.rectangle(frame, (x1-50, y1-250), (x2+100, y2+120), bgr, 2)
+                #cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)                
                 self.detections.append(self.class_to_label(labels[i]))
                 
                 
@@ -107,8 +131,6 @@ class CardDetection:
                 
                 # cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2) #unchanged box
                 # cv2.rectangle(frame, (x1-100, y1-100), (x2+200, y2+200), bgr, 2)
-
-    
                 # cv2.line(frame, (x1+250, y1+100), (x2+400, y2+100), bgr, 2)
                 #if self.class_to_label(labels[i]) == "ya":
                 #    cv2.rectangle(frame, (x1+400, y1-150), (x2+600, y2+100), bgr, 2)
@@ -116,14 +138,10 @@ class CardDetection:
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1+415, y1-45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-
                 #    cv2.rectangle(frame, (x1-400, y1+100), (x2-200, y2), bgr, 2)
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+145), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
                 #    cv2.putText(frame, "Lorem ipsum dolor sit", (x1-375, y1+160), cv2.FONT_HERSHEY_SIMPLEX, 0.5, bgr, 2)
-                    
-                
-                
                 # cv2.putText(frame, """Lorem ipsum dolor sit amet\n
 
                 # Lorem ipsum dolor sit amet \n
@@ -154,19 +172,37 @@ class CardDetection:
             self.correct = "Det er rigtigt!"
             self.wrong = "Det er forkert :("
             self.scan_card = "Placer to kort i rammen, for at begynde"
-            self.color = 255,0,0
-            self.pos =  150,150
-            
+            self.color = 255,250,150
+            self.pos =  50,50
+
+            self.text1 = "Pius 7 was the pope from 1800 until his death in 1823. The monument here is the original model in plaster from 1824 to 25, the marble monument was revealed in St. Peter’s Basilica in 1831. It is the sign of Thorvaldsen’s fame that he received the order on Pope Pius 7. tomb of the catholicism’s main church, even though he was protestant. The aging pope sits on his throne with the tiara on his head. With the stretched hand he makes a kind of gesture while looking forward to us. The allegorical figure of women to the right, The Divine Strength (A144), on the other hand, looks up against the sky and the woman on the left, The Heavenly Wisdom (A143), looks down, thoughtfully immersed in the book, the Bible she holds. The Pope in the middle thus becomes the balanced mediator of a message consisting of equal parts of Christian sentiment andz Christian wisdom."
+
+            self.text2 = "The kneeling angel with a flower wreath on his head and a clamshell in his hands created Thorvaldsen as a baptismal font for Our Lady Church in the 1820s."
+            self.text3 = "The band that the geniuses hold is a so-called banderole either with the notes or the lyrics to what they sing. The wave movement of the banner across the relief can be seen as an image of the vocal cords or, rather, of the falling and rising tones that voices produce during singing."
+
+            #text_1 = "Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum"
+            #wrapped_text = textwrap.wrap(text_1, width=35)
+
+            screen_size = 1920,1080
+
             ret, frame = cap.read()
             assert ret
+
+            #end_time = time()
+            #fps = 10/np.round(end_time - start_time, 2)
+            #print(f"Frames Per Second : {fps}")
+            # cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
             
-            frame = cv2.resize(frame, (1920,1080)) #god skærmstørrelse
+            frame = cv2.resize(frame, (screen_size)) #god skærmstørrelse
             
             start_time = time()
             results = self.score_frame(frame)
             frame = self.plot_boxes(results, frame)
             cv2.imshow('YoloV5, Regular Screen', frame)
-            cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
+            cv2.rectangle(frame, (0,0),(screen_size), (0,0,0),-1)
+
+
+            frame = self.plot_boxes(results, frame)
             
             length = len(self.detections)
             
@@ -178,28 +214,21 @@ class CardDetection:
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
-                cv2.rectangle(frame, (self.x1-400, self.y1+100), (self.x2-200, self.y2), self.bgr, 2)
-                cv2.putText(frame, "Lorem ipsum dolor sit", (self.x1-375, self.y1+130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.bgr, 2)
-                cv2.putText(frame, "Lorem ipsum dolor sit", (self.x1-375, self.y1+145), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.bgr, 2)
-                cv2.putText(frame, "Lorem ipsum dolor sit", (self.x1-375, self.y1+160), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.bgr, 2)
-            
+                self.wrappedtext(frame, self.text1, (0,255,221))
+
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+                self.wrappedtext(frame, self.text3, (0,255,221))
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
                 self.draw_label(frame, self.correct, (self.pos), (49,140,0))
+                self.wrappedtext(frame, self.text2, (0,255,221))
                 
             elif self.detections != self.correct_answers:
                 self.draw_label(frame, self.wrong, (self.pos), (0,8,247))
             
-            results = self.score_frame(frame)
+            
             cv2.imshow('YoloV5 Detection - Dark Screen', frame)
-            
-            
-            #end_time = time()
-            #fps = 10/np.round(end_time - start_time, 2)
-            #print(f"Frames Per Second : {fps}")
-            # cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
         
  
             if cv2.waitKey(1) & 0xFF == ord('p'):
