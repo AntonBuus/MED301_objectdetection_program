@@ -85,6 +85,7 @@ class CardDetection:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (255, 255, 0)
                 
+                
                 # img = frame
                 
                 # cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2) #unchanged box
@@ -128,7 +129,6 @@ class CardDetection:
         """
         cap = self.get_video_capture()
         assert cap.isOpened()
-        windowsize = 832
       
         while True:
         
@@ -137,13 +137,13 @@ class CardDetection:
             
             # frame = cv2.resize(frame, (416,416))
             # frame = cv2.resize(frame, (windowsize, windowsize))
-            frame = cv2.resize(frame, (1200,900)) #god skærmstørrelse
-            # frame = cv2.resize(frame, ())
+            #frame = cv2.resize(frame, (1200,900)) #god skærmstørrelse (prøver noget andet nedenunder - Gabe)
+            frame = cv2.resize(frame, (1920,1080)) #god skærmstørrelse
             
             start_time = time()
             results = self.score_frame(frame)
             frame = self.plot_boxes(results, frame)
-            cv2.imshow('Normalt kamera', frame)
+            cv2.imshow('YoloV5, Regular Screen', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             frame = self.plot_boxes(results, frame)
             
@@ -153,7 +153,11 @@ class CardDetection:
              
             cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
             
-            cv2.imshow('YOLOv5 Detection', frame)
+            cv2.imshow('YoloV5 Detection - Dark Screen', frame)
+
+            cv2.setWindowProperty("YoloV5", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
+
  
             if cv2.waitKey(5) & 0xFF == 27:
                 break
@@ -162,5 +166,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=1, model_name='Supergood2.pt')
+detector = CardDetection(capture_index=0, model_name='Supergood2.pt')
 detector()

@@ -120,5 +120,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=0, model_name='Supergood.pt')
+detector = CardDetection(capture_index=0, model_name='Supergood2.pt')
 detector()
