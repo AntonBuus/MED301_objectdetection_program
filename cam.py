@@ -5,7 +5,7 @@ WINDOW_NAME = 'Full Integration'
 
 
 # initialize video capture object to read video from external webcam
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 # if there is no external camera then take the built-in camera
 if not video_capture.read()[0]:
     video_capture = cv2.VideoCapture(0)
