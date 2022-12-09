@@ -72,15 +72,15 @@ class CardDetection:
     def draw_label(self, img, text, pos, bg_farve):
         self.font_face = cv2.FONT_HERSHEY_TRIPLEX
         self.scale = 1
-        self.farve = (0, 0, 0)
-        self.thickness = cv2.FILLED
+        self.farve = bg_farve
+        self.thickness = 3
         self.margin = 20
         self.txt_size = cv2.getTextSize(text, self.font_face, self.scale, self.thickness)
 
         end_x = pos[0] + self.txt_size[0][0] + self.margin
         end_y = pos[1] - self.txt_size[0][1] - self.margin
 
-        cv2.rectangle(img, pos, (end_x, end_y), bg_farve, self.thickness)
+        #cv2.rectangle(img, pos, (end_x, end_y), bg_farve, self.thickness)
         cv2.putText(img, text, pos, self.font_face, self.scale, self.farve, 1, cv2.LINE_AA)
 
     def wrappedtext(self, img, text, bg_farve):
@@ -118,14 +118,14 @@ class CardDetection:
         x_shape, y_shape = frame.shape[1], frame.shape[0]
         for i in range(n):
             row = cord[i]
-            if row[4] >= 0.83:
+            if row[4] >= 0.88:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (182, 0, 255)
                 #cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
-                cv2.rectangle(frame, (x1-50, y1-250), (x2+100, y2+120), bgr, 2)
                 #cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)                
                 self.detections.append(self.class_to_label(labels[i]))
                 
+                #cv2.rectangle(frame, (x1-50, y1-250), (x2+100, y2+120), bgr, 2)
                 
                 # img = frame
                 
@@ -172,16 +172,17 @@ class CardDetection:
             self.correct = "Det er rigtigt!"
             self.wrong = "Det er forkert :("
             self.scan_card = "Placer to kort i rammen, for at begynde"
-            self.color = 255,250,150
-            self.pos =  50,50
+            self.color = 255,255,255
+            self.pos =  550,950
+            self.correct_color = (57, 255, 8)
+            self.wrong_color = 0, 0, 255
 
-            self.text1 = "Pius 7 was the pope from 1800 until his death in 1823. The monument here is the original model in plaster from 1824 to 25, the marble monument was revealed in St. Peter’s Basilica in 1831. It is the sign of Thorvaldsen’s fame that he received the order on Pope Pius 7. tomb of the catholicism’s main church, even though he was protestant. The aging pope sits on his throne with the tiara on his head. With the stretched hand he makes a kind of gesture while looking forward to us. The allegorical figure of women to the right, The Divine Strength (A144), on the other hand, looks up against the sky and the woman on the left, The Heavenly Wisdom (A143), looks down, thoughtfully immersed in the book, the Bible she holds. The Pope in the middle thus becomes the balanced mediator of a message consisting of equal parts of Christian sentiment andz Christian wisdom."
 
-            self.text2 = "The kneeling angel with a flower wreath on his head and a clamshell in his hands created Thorvaldsen as a baptismal font for Our Lady Church in the 1820s."
-            self.text3 = "The band that the geniuses hold is a so-called banderole either with the notes or the lyrics to what they sing. The wave movement of the banner across the relief can be seen as an image of the vocal cords or, rather, of the falling and rising tones that voices produce during singing."
+            self.text1 = """The monument here is the original model in plaster from 1824 to 25: Pius 7 was the pope from 1800 until his death in 1823. The marble monument was revealed in St. Peter`s Basilica in 1831. It is the sign of Thorvaldsens fame that he received the order on Pope Pius 7. tomb of the catholicism`s main church, even though he was protestant. The aging pope sits on his throne with the tiara on his head. With the stretched hand he makes a kind of gesture while looking forward to us. The allegorical figure of women to the right, The Divine Strength, on the other hand, looks up against the sky and the woman on the left, The Heavenly Wisdom, looks down, thoughtfully immersed in the book, the Bible she holds. The Pope in the middle thus becomes the balanced mediator of a message consisting of equal parts of Christian sentiment andz Christian wisdom."""
 
-            #text_1 = "Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum"
-            #wrapped_text = textwrap.wrap(text_1, width=35)
+            self.text2 = "This statue was made in the period 1827-1828: The kneeling angel with a flower wreath on his head and a clamshell in his hands created Thorvaldsen as a baptismal font for Our Lady Church in the 1820s."
+
+            self.text3 = "This statue was made in 1833: The band that the geniuses hold is a so-called banderole either with the notes or the lyrics to what they sing. The wave movement of the banner across the relief can be seen as an image of the vocal cords or, rather, of the falling and rising tones that voices produce during singing."
 
             screen_size = 1920,1080
 
@@ -200,6 +201,9 @@ class CardDetection:
             frame = self.plot_boxes(results, frame)
             cv2.imshow('YoloV5, Regular Screen', frame)
             cv2.rectangle(frame, (0,0),(screen_size), (0,0,0),-1)
+            cv2.rectangle(frame, (0,0),(screen_size), (2255,255,255),75)
+            start_1 = cv2.rectangle(frame, (670, 540), (900, 900), (255,255,255), 2)
+            start_2 = cv2.rectangle(frame, (1020, 540), (1250, 900), (255,255,255), 2)
 
 
             frame = self.plot_boxes(results, frame)
@@ -211,21 +215,30 @@ class CardDetection:
             
             elif length == 1:
                 self.draw_label(frame, "Placer et kort mere", (self.pos), (self.color))
-            
+       
+
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
-                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
-                self.wrappedtext(frame, self.text1, (0,255,221))
+                self.draw_label(frame, self.correct, (self.pos), (57, 255, 8))
+                self.wrappedtext(frame, self.text1, (255,255,225))
+                start_1 = cv2.rectangle(frame, (670, 540), (900, 900), (57, 255, 8), 2)
+                start_2 = cv2.rectangle(frame, (1020, 540), (1250, 900), (57, 255, 8), 2)
 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
-                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
-                self.wrappedtext(frame, self.text3, (0,255,221))
+                self.draw_label(frame, self.correct, (self.pos), (57, 255, 8))
+                self.wrappedtext(frame, self.text3, (self.color))
+                start_1 = cv2.rectangle(frame, (670, 540), (900, 900), (57, 255, 8), 2)
+                start_2 = cv2.rectangle(frame, (1020, 540), (1250, 900), (57, 255, 8), 2)
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
-                self.draw_label(frame, self.correct, (self.pos), (49,140,0))
-                self.wrappedtext(frame, self.text2, (0,255,221))
+                self.draw_label(frame, self.correct, (self.pos), (57, 255, 8))
+                self.wrappedtext(frame, self.text2, (self.color))
+                start_1 = cv2.rectangle(frame, (670, 540), (900, 900), (57, 255, 8), 2)
+                start_2 = cv2.rectangle(frame, (1020, 540), (1250, 900), (57, 255, 8), 2)
                 
             elif self.detections != self.correct_answers:
-                self.draw_label(frame, self.wrong, (self.pos), (0,8,247))
+                self.draw_label(frame, self.wrong, (self.pos), (0,0,255))
+                start_1 = cv2.rectangle(frame, (670, 540), (900, 900), (0, 0, 255), 2)
+                start_2 = cv2.rectangle(frame, (1020, 540), (1250, 900), (0, 0, 255), 2)
             
             
             cv2.imshow('YoloV5 Detection - Dark Screen', frame)
@@ -240,5 +253,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=0, model_name='Supergood2.pt')
+detector = CardDetection(capture_index=1, model_name='Supergood2.pt')
 detector()
