@@ -20,7 +20,7 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
-        self.correct_answers = [["AC", "10S"], ["10C", "8S"],["9C", "7S"]]
+        self.correct_answers = [["ya", "sa"], ["li", "ta"],["ma", "n"]]
         
 
     def get_video_capture(self):
@@ -89,7 +89,7 @@ class CardDetection:
         x_shape, y_shape = frame.shape[1], frame.shape[0]
         for i in range(n):
             row = cord[i]
-            if row[4] >= 0.3:
+            if row[4] >= 0.85:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 bgr = (255, 255, 0)
                 cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
@@ -129,9 +129,11 @@ class CardDetection:
             assert ret
             
             frame = cv2.resize(frame, (1920,1080))
+           
             
             #start_time = time()
             results = self.score_frame(frame)
+            frame = self.plot_boxes(results, frame)
             cv2.imshow('Normalt kamera', frame)
             cv2.rectangle(frame, (0,0),(1920,1080), (0,0,0),-1)
             
@@ -157,16 +159,7 @@ class CardDetection:
                 
             elif self.detections != self.correct_answers:
                 self.draw_label(frame, self.wrong, (self.pos), (0,8,247))
-            
-     #       else:
-      #          self.draw_label(frame, self.scan_card, (self.pos), (0,8,247))
-                
-            
-            #end_time = time()
-            #fps = 10/np.round(end_time - start_time, 2)
-            #print(f"Frames Per Second : {fps}")
-             
-            #cv2.putText(frame, f'F5PS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+
             
             cv2.imshow('YOLOv5 Detection', frame)
             
