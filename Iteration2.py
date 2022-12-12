@@ -126,14 +126,19 @@ class CardDetection:
             self.text1 = "Text1.png"
             self.text2 = "Text2.png"
             self.text3 = "text3.png"
+            self.tv = "tvbillede.png"
             
             #Rectangles for placement of card
-            self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
-            self.end_pos1 = (900, 900) #Ending Point for Rectangle 1
+           #self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
+            #self.end_pos1 = (900, 900) #Ending Point for Rectangle 1
+            self.start_pos1 = (640, 510) # Starting Point for Rectangle 1 
+            self.end_pos1 = (900, 900) #Ending Point for Rectangle 1            
+
             
-            self.start_pos2 = (1020, 540) # Starting Point for Rectangle 2 
+            #self.start_pos2 = (1020, 540) # Starting Point for Rectangle 2 
+            #self.end_pos2 = (1250, 900) #Ending Point for Rectangle 2
+            self.start_pos2 = (990, 510) # Starting Point for Rectangle 2 
             self.end_pos2 = (1250, 900) #Ending Point for Rectangle 2
-            
             
             #Screen Size
             screen_size = 1920,1080
@@ -159,12 +164,12 @@ class CardDetection:
 
 
             frame = self.plot_boxes(results, frame)
-            
             # Checking the length of the detections lists in plot_boxes function. 
             length = len(self.detections)
             
             # Conditional Statements, checking the current 'labels' detected compared to the correct answers list. 
             if length == 0:
+                self.load_image (frame, self.tv, self.text_position)
                 self.load_image (frame, self.place_start, self.lower_position)
                 #self.draw_label(frame, self.scan_card, (self.pos), (self.black))
             
@@ -209,5 +214,5 @@ class CardDetection:
         
         
 # Create a new object and execute.
-detector = CardDetection(capture_index=1, model_name='Supergood2.pt')
+detector = CardDetection(capture_index=0, model_name='Supergood2.pt')
 detector()
