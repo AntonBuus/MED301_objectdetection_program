@@ -118,6 +118,7 @@ class CardDetection:
             self.background = cv2.imread('Thorvaldsens.png')
             self.lower_position = 510, 942
             self.text_position = 301, 142
+            self.tv_position = 115, 351
             
             self.place_start = "start.png"
             self.place_start2 = "One_more.png"
@@ -169,7 +170,7 @@ class CardDetection:
             
             # Conditional Statements, checking the current 'labels' detected compared to the correct answers list. 
             if length == 0:
-                self.load_image (frame, self.tv, self.text_position)
+                self.load_image (frame, self.tv, self.tv_position)
                 self.load_image (frame, self.place_start, self.lower_position)
                 #self.draw_label(frame, self.scan_card, (self.pos), (self.black))
             
