@@ -36,7 +36,6 @@ class CardDetection:
         """
         return cv2.VideoCapture(self.capture_index)
 
-
     def load_model(self, model_name):
         """
         Loads Yolo5 model from pytorch hub.
@@ -58,7 +57,6 @@ class CardDetection:
         x, y = position
 
         frame[ y:y+self.overlay_height , x:x+self.overlay_width ] = self.overlay
-
 
     def score_frame(self, frame):
         """
@@ -90,8 +88,7 @@ class CardDetection:
             
         self.play = state
         return 
-            
-            
+                       
     def plot_boxes(self, results, frame):
         """
         Takes a frame and its results as input, and plots the bounding boxes and label on to the frame.
@@ -130,22 +127,26 @@ class CardDetection:
             self.wrong_color = 0,0,255
             
             #Image loading and position
-            self.background = cv2.imread('Thorvaldsens.png')
+            self.background = cv2.imread('PNGs/Thorvaldsens.png')
             self.label_position = 510, 50
             self.frame_position = 21, 42
             
-            self.start = "Start.png"
-            self.om_question = "om_question.png"
-            self.om_statue = "om_statue.png"
-            self.wrong = "wrong_combo.png"
+            self.start = "PNGs/Start.png"
+            self.om_question = "PNGs/om_question.png"
+            self.om_statue = "PNGs/om_statue.png"
+            self.wrong = "PNGs/wrong_combo.png"
 
-            self.christ = "Christ.png"
-            self.jason = "Jason.png"
-            self.nico = "Nico.png"
-            self.paven = "Paven.png"
+            self.christ = "PNGs/Christ.png"
+            self.jason = "PNGs/Jason.png"
+            self.nico = "PNGs/Nico.png"
+            self.paven = "PNGs/Paven.png"
+            
+            #Sounds
+            correct_sound = "Sounds/correct.mp3"
+            wrong_sound = "Sounds/wrong.mp3"
             
             #Rectangles for placement of card
-           #self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
+            #self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
             #self.end_pos1 = (900, 900) #Ending Point for Rectangle 1
             self.start_pos1 = (678, 590) # Starting Point for Rectangle 1 
             self.end_pos1 = (900, 970) #Ending Point for Rectangle 1            
@@ -206,8 +207,6 @@ class CardDetection:
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
                 #self.play_sound ("correct.mp3", False)
 
-
-
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
                 self.load_image (frame, self.jason, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
@@ -239,10 +238,11 @@ class CardDetection:
             cv2.imshow('YoloV5 Detection - UI', frame)
         
  
-            if cv2.waitKey(1) & 0xFF == ord('p'):
+            if cv2.waitKey(0) & 0xFF == ord('p'):
                  print(self.detections) 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-             break
+            if cv2.waitKey(0) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                break
       
         cap.release()
         
