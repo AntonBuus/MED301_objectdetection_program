@@ -81,12 +81,15 @@ class CardDetection:
         return self.classes[int(x)]
 
 
-    def play_sound (self, sound, state):
-        play = True
+    #def play_sound (self, sound, state):
+        self.play = True
         
-        if play == True:
-            playsound(sound)
-            play = state
+        if self.play:
+            playsound(sound, True)
+            
+            
+        self.play = state
+        return 
             
             
     def plot_boxes(self, results, frame):
@@ -201,34 +204,35 @@ class CardDetection:
                 self.load_image (frame, self.paven, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.play_sound (self, "correct.mp3", False)
+                #self.play_sound ("correct.mp3", False)
+
 
 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
                 self.load_image (frame, self.jason, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.play_sound (self, "correct.mp3", False)
+
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
                 self.load_image (frame, self.christ, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.play_sound (self, "correct.mp3", False)
+
                 
                 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[3]):
                 self.load_image (frame, self.nico, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.play_sound (self, "correct.mp3", False)
+
                                
              #Checks if the cards are wrongly matched   
             elif self.detections != self.correct_answers:
                 self.load_image (frame, self.wrong, self.label_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.wrong_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.wrong_color), 2)
-                self.play_sound (self, "wrong.mp3", False)
+
                    
                                            
             
