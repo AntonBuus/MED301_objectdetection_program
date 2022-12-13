@@ -4,7 +4,8 @@ import cv2
 from time import time
 from PIL import Image
 import collections
-import textwrap 
+ 
+
 
 
 class CardDetection:
@@ -23,9 +24,9 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
-        self.correct_answers = [["di", "hu"], ["li", "g"],["ya", "n"], ["ma","wa"]]
+        self.correct_answers = [["di", "ba"], ["li", "g"],["ya", "n"], ["ma","wa"]]
         self.only_question = [["di"], ["li"],["ya"], ["ma"]]
-        self.only_statue = [["hu"], ["g"],["n"], ["wa"], ["sa"], ["ka"]]
+        self.only_statue = [["ba"], ["g"],["n"], ["wa"], ["sa"], ["ka"] ,["sa"],["ka"]]
 
     def get_video_capture(self):
         """
@@ -134,14 +135,14 @@ class CardDetection:
             #Rectangles for placement of card
            #self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
             #self.end_pos1 = (900, 900) #Ending Point for Rectangle 1
-            self.start_pos1 = (640, 510) # Starting Point for Rectangle 1 
-            self.end_pos1 = (900, 900) #Ending Point for Rectangle 1            
+            self.start_pos1 = (678, 590) # Starting Point for Rectangle 1 
+            self.end_pos1 = (900, 970) #Ending Point for Rectangle 1            
 
             
             #self.start_pos2 = (1020, 540) # Starting Point for Rectangle 2 
             #self.end_pos2 = (1250, 900) #Ending Point for Rectangle 2
-            self.start_pos2 = (990, 510) # Starting Point for Rectangle 2 
-            self.end_pos2 = (1250, 900) #Ending Point for Rectangle 2
+            self.start_pos2 = (1000, 590) # Starting Point for Rectangle 2 
+            self.end_pos2 = (1225, 970) #Ending Point for Rectangle 2
             
             #Screen Size
             screen_size = 1920,1080
@@ -176,43 +177,43 @@ class CardDetection:
                 #self.draw_label(frame, self.scan_card, (self.pos), (self.black))
             
             #This following to elif conditions checks what card has been placed and accordingly displays the right frame.
-            elif collections.Counter(self.detections) == collections.Counter(self.only_statue[0]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[1]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[2]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[3]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[4]) :
+            elif collections.Counter(self.detections) == collections.Counter(self.only_statue[0]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[1]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[2]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[3]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[4]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[5]) :
+                self.load_image (frame, self.om_question, self.label_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.yellow), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.yellow), 2)
-                self.load_image (frame, self.om_question, self.label_position)
                 
             elif collections.Counter(self.detections) == collections.Counter(self.only_question[0]) or collections.Counter(self.detections) == collections.Counter(self.only_question[1]) or collections.Counter(self.detections) == collections.Counter(self.only_question[2]) or collections.Counter(self.detections) == collections.Counter(self.only_question[3]):
+                self.load_image (frame, self.om_statue, self.label_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.yellow), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.yellow), 2)
-                self.load_image (frame, self.om_statue, self.label_position)
 
             #This following four elif conditions check if the placed.
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
+                self.load_image (frame, self.paven, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.paven, self.frame_position)
 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
+                self.load_image (frame, self.jason, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.jason, self.frame_position)
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
+                self.load_image (frame, self.christ, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.christ, self.frame_position)
                 
                 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[3]):
+                self.load_image (frame, self.nico, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.nico, self.frame_position)
                                
              #Checks if the cards are wrongly matched   
             elif self.detections != self.correct_answers:
+                self.load_image (frame, self.wrong, self.label_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.wrong_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.wrong_color), 2)
-                self.load_image (frame, self.wrong, self.label_position)
                    
                                            
             
