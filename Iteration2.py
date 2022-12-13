@@ -23,10 +23,9 @@ class CardDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
-        self.correct_answers = [["ya", "sa"], ["li", "ta"],["ma", "n"]]
-        self.correct_answers1 = [["n", "ya"], ["n", "sa"],["n", "li"], ["n", "ma"]]
-        self.correct_answers2 = [["g", "ya"], ["g", "sa"],["g", "li"], ["g", "ma"]]
-        self.correct_answers2 = [["wa", "ya"], ["wa", "sa"],["wa", "li"], ["wa", "ma"]]
+        self.correct_answers = [["di", "hu"], ["li", "g"],["ya", "n"], ["ma","wa"]]
+        self.only_question = [["di"], ["li"],["ya"], ["ma"]]
+        self.only_statue = [["hu"], ["g"],["n"], ["wa"], ["sa"], ["ka"]]
 
     def get_video_capture(self):
         """
@@ -119,18 +118,18 @@ class CardDetection:
             
             #Image loading and position
             self.background = cv2.imread('Thorvaldsens.png')
-            self.lower_position = 510, 942
-            self.text_position = 301, 142
-            self.tv_position = 115, 351
+            self.label_position = 510, 50
+            self.frame_position = 21, 42
             
-            self.place_start = "start.png"
-            self.place_start2 = "One_more.png"
-            self.correct_card = "Correct.png"
-            self.wrong_card = "wrong.png"
-            self.text1 = "Text1.png"
-            self.text2 = "Text2.png"
-            self.text3 = "text3.png"
-            self.tv = "tvbillede.png"
+            self.start = "Start.png"
+            self.om_question = "om_question.png"
+            self.om_statue = "om_statue.png"
+            self.wrong = "wrong_combo.png"
+
+            self.christ = "Christ.png"
+            self.jason = "Jason.png"
+            self.nico = "Nico.png"
+            self.paven = "Paven.png"
             
             #Rectangles for placement of card
            #self.start_pos1 = (670, 540) # Starting Point for Rectangle 1 
@@ -173,114 +172,48 @@ class CardDetection:
             
             # Conditional Statements, checking the current 'labels' detected compared to the correct answers list. 
             if length == 0:
-                self.load_image (frame, self.tv, self.tv_position)
-                self.load_image (frame, self.place_start, self.lower_position)
+                self.load_image (frame, self.start, self.label_position)
                 #self.draw_label(frame, self.scan_card, (self.pos), (self.black))
             
-            elif length == 1:
+            #This following to elif conditions checks what card has been placed and accordingly displays the right frame.
+            elif collections.Counter(self.detections) == collections.Counter(self.only_statue[0]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[1]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[2]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[3]) or collections.Counter(self.detections) == collections.Counter(self.only_statue[4]) :
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.yellow), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.yellow), 2)
-                self.load_image (frame, self.place_start2, self.lower_position)
+                self.load_image (frame, self.om_question, self.label_position)
+                
+            elif collections.Counter(self.detections) == collections.Counter(self.only_question[0]) or collections.Counter(self.detections) == collections.Counter(self.only_question[1]) or collections.Counter(self.detections) == collections.Counter(self.only_question[2]) or collections.Counter(self.detections) == collections.Counter(self.only_question[3]):
+                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.yellow), 2)
+                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.yellow), 2)
+                self.load_image (frame, self.om_statue, self.label_position)
 
+            #This following four elif conditions check if the placed.
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text1, self.text_position)
+                self.load_image (frame, self.paven, self.frame_position)
 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text2, self.text_position)
+                self.load_image (frame, self.jason, self.frame_position)
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)
+                self.load_image (frame, self.christ, self.frame_position)
                 
+                
+            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[3]):
+                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
+                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
+                self.load_image (frame, self.nico, self.frame_position)
+                               
+             #Checks if the cards are wrongly matched   
             elif self.detections != self.correct_answers:
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.wrong_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.wrong_color), 2)
-                self.load_image (frame, self.wrong_card, self.lower_position)
-                
-                
-    #NYE ____________________________________________________________________
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers1[0]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text1, self.text_position)
-
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers1[1]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text2, self.text_position)
-            
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers1[2]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)    
-                
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers1[3]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)      
-                                      
-
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers2[0]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text1, self.text_position)
-
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers2[1]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text2, self.text_position)
-            
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers2[2]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)    
-                
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers2[3]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)      
-                           
-
-                
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers3[0]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text1, self.text_position)
-
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers3[1]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text2, self.text_position)
-            
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers3[2]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)    
-                
-            elif collections.Counter(self.detections) == collections.Counter(self.correct_answers3[3]):
-                start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
-                start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
-                self.load_image (frame, self.correct_card, self.lower_position)
-                self.load_image (frame, self.text3, self.text_position)      
+                self.load_image (frame, self.wrong, self.label_position)
+                   
                                            
             
             cv2.imshow('YoloV5 Detection - UI', frame)
