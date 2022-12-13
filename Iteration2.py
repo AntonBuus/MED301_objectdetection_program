@@ -4,6 +4,7 @@ import cv2
 from time import time
 from PIL import Image
 import collections
+from playsound import playsound
  
 
 
@@ -192,28 +193,33 @@ class CardDetection:
                 self.load_image (frame, self.paven, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
+                playsound("correct.mp3")
 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[1]):
                 self.load_image (frame, self.jason, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
+                playsound("correct.mp3")
             
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[2]):
                 self.load_image (frame, self.christ, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
+                playsound("correct.mp3")
                 
                 
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[3]):
                 self.load_image (frame, self.nico, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.correct_color), 2)
+                playsound("correct.mp3")
                                
              #Checks if the cards are wrongly matched   
             elif self.detections != self.correct_answers:
                 self.load_image (frame, self.wrong, self.label_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.wrong_color), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.wrong_color), 2)
+                playsound("wrong.mp3")
                    
                                            
             
