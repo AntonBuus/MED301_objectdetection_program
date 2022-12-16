@@ -41,12 +41,13 @@ class Objectdetection:
         """
         self.overlay = cv2.imread(img)
 
-        # Get Image dimensions
+        # Image dimensions. Used to ensure the image can fit in the frame
         self.overlay_height, self.overlay_width, _ = self.overlay.shape
 
         # Decide X,Y location of overlay image inside video frame. 
         x, y = position
 
+        #Sets the frame to the image. Addtionally ensures that image can fit in the frame.
         frame[ y:y+self.overlay_height , x:x+self.overlay_width ] = self.overlay
 
 
@@ -59,7 +60,6 @@ class Objectdetection:
         results = self.model(frame)
         labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
         return labels, cord
-
 
     def names_to_list(self, results, frame):
         """
@@ -86,6 +86,7 @@ class Objectdetection:
         This function is called upon, when an instance of the class is created. 
         The function contains a while loop that read through each frame from the live feed
         """
+        
         cap = self.live_feed()
         assert cap.isOpened()
       
@@ -135,7 +136,6 @@ class Objectdetection:
             
             #Background
             frame = self.background
-            #cv2.rectangle(frame, (0,0),(screen_size), (0,0,0),-1) # Black Screen Background
             
             #Rectangles around cards 
             start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.black), 2)
@@ -195,8 +195,6 @@ class Objectdetection:
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.wrong_color), 2)
 
                    
-                                           
-            
             cv2.imshow('YoloV5 Detection - UI', frame)
         
  
@@ -208,6 +206,6 @@ class Objectdetection:
         cap.release()
         
         
-# Create a new object and execute.
-detector = Objectdetection(video_index=1, model_file='Supergood2.pt')
-detector()
+# Creates a new instance of class
+obj_1 = Objectdetection(video_index=1, model_file='Supergood2.pt')
+obj_1()
