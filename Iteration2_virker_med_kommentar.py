@@ -65,7 +65,8 @@ class Objectdetection:
         """
         Takes a frame as input. 
         The results are being provided by the detections_in_frame function. It has the labels and coordinates picked up by the model.
-        Additionally this allows us to set a threshold for the coordinates - i.e setting a number for the confidence level from which objects should be detected
+        Additionally this allows us to set a threshold for the coordinates - i.e setting a number for the confidence level from which 
+        objects should be detected.
         The purpose of this function is to fill the the empty list, with the labels of the objects being detected by the model. 
         This is done so it can be checked if the user has answered correctly or not, and to create prompts for the user. 
         This function can also be used to add bounding boxes and display the labels on the frame. However, this is not needed
@@ -162,7 +163,7 @@ class Objectdetection:
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.yellow), 2)
                 start_2 = cv2.rectangle(frame, self.start_pos2, self.end_pos2, (self.yellow), 2)
 
-            #This following four elif conditions check if the placed.
+            #The following four elif statements, check if a pair within the correct answer list has been placed and detected
             elif collections.Counter(self.detections) == collections.Counter(self.correct_answers[0]):
                 self.load_image (frame, self.paven, self.frame_position)
                 start_1 = cv2.rectangle(frame, self.start_pos1, self.end_pos1, (self.correct_color), 2)
