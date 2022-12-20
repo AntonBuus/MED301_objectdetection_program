@@ -3,81 +3,82 @@ by Group 301 on Medialogy 3. semester | Hamza Majid Qureshi, Gabriel C.D. Wallø
 
 _____________________________________________________
 
-#Table of Contents:
-##1. The Project
+# Table of Contents:
+## 1. The Project
 
-##2. Prerequisties 
-  ###2.1 - The environment
-    ####2.1.1 Virtual Environment 
-  ###2.2 - requirement.txt
+## 2. Prerequisties 
+  ### 2.1 - The environment
+    #### 2.1.1 Virtual Environment 
+  ### 2.2 - requirement.txt
 	
-##3. Run the Program 
+## 3. Run the Program 
   
 _____________________________________________________
 
-#1. The Project: 
+# 1. The Project: 
 For the semester project, the group decided to create an exhibit that promotes social and game-based learning in collaboration with Thorvaldsens Mueseum. 
 
 _____________________________________________________
-#2. How to use the program
+# 2. How to use the program
 The following section, will provide a guide on how to use the program
 
-  ##2.1 The environment
+  ## 2.1 The environment
+  
   To run the program, you must have a installation of Python 3.9.x or older. From our testing, Pytorch is not yet optimised for Python 3.10 and newer. If you have a new version of Python installed, we recommend creating a virtual environment
     
-    ###2.1.1 Virtual Environment 
+    ##### 2.1.1 Virtual Environment 
     To create a virtual environment in Python, follow these steps:
     
-    ####On MacOS:
+    ##### On MacOS:
     
-    ####Step 1: 
+    ##### Step 1: 
     Open the terminal and navigate to the directory where you want to create the virtual environment.
     
-    ####Step 2:
+    ##### Step 2:
     Type the following into the terminal:
     python3.9 -m venv env
 
-    ####Step 3:
+    ##### Step 3:
     To activate the virtual Environment run the following command:
     source env/bin/activate
     
-    ####On Windows:
+    ##### On Windows:
     
-    ####Step 1:
+    ##### Step 1:
     Open the command prompt and navigate to the directory where you want to create the virtual environment.
     
-    ####Step 2:
+    ##### Step 2:
     Run the following command:
     python -m venv env
     
-    ####Step 3:
+    ##### Step 3:
     Activate the virtual environment by running the following command:
     env\Scripts\activate.bat
     
-    ####NOTE: 
+    ##### NOTE: 
     "env" described above is the name of the virtual environment. This can be adjusted to your preference. 
     
-  ##2.2 Requirement.txt
+  ## 2.2 Requirement.txt
   Once you have the right installation of Python, either be on the system or in a virtual environment, you need to install the required packages to run the program. 
   
   To do this:
- ####Step 1: 
+ ##### Step 1: 
   Navigate to the Terminal on MacOS or Command Prompt on Windows
   
-  ####Step2: 
+  ##### Step2: 
   If you have created a virtual environment, activate using above instructions
   
-  ####Step 3:
+  ##### Step 3:
   Navigate to the directory where you have installed the files of this project
   
-  ####Step 4:
+  ##### Step 4:
   Run the following command:
   pip install -r requirement.txt
   
 	
 __________________________________________
 
-#3. Run the Program
+# 3. Run the Program
 
 To run the program, run the **"main.py"** file. 
 
