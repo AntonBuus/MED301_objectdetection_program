@@ -6,10 +6,12 @@ _____________________________________________________
 Table of Contents:
 1. The Project
 
-2. How to use the program
+2. Prerequisties 
   2.1 - The environment
     2.1.1 Virtual Environment 
   2.2 - requirement.txt
+	
+3. Run the Program 
   
 _____________________________________________________
 
@@ -72,6 +74,21 @@ The following section, will provide a guide on how to use the program
   Run the following command:
   pip install -r requirement.txt
   
+	
+__________________________________________
+
+3. Run the Program
+
+To run the program, run the "main.py" file. 
+
+This can done through the terminal, by navigating to the the project directory and typing "python3 main.py"
+
+or 
+
+Running the file from your editor of choice. 
+
+We recommend running it from the editor, as you have the option to decide which camera you want to use by adjusting "video_index". 
+
     
 
 
