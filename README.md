@@ -1,8 +1,9 @@
-Interactive Digital Card Exhibit
-by Group 301 on Medialogy 3. semester | Hamza Majid Qureshi, Gabriel C.D. Walløe, Malthe Hansen, Anton Buus Hansen, Amanda Leithoff Johansen 
+# Interactive Digital Card Exhibit
+## by Group 301 on Medialogy 3. semester | Hamza Majid Qureshi, Gabriel C.D. Walløe, Malthe Hansen, Anton Buus Hansen, Amanda Leithoff Johansen 
 
-Special thanks to Nicolai Nielsen
-The general structure of the code was inspired by a code from Nicolai Nielsen: https://github.com/niconielsen32/ComputerVision/blob/master/DeployYOLOmodel.py. While the structure remains the same, the code has been changed drastically to suit the needs of the product and the FPS. Two functions and a few variables are identical to the ones found in Nicolai Nielsen's script
+# Special thanks to Nicolai Nielsen!	
+The fundamentals of our code was inspired by **Nicolai Nielsen** and his project.
+His project can be found here: https://github.com/niconielsen32/ComputerVision/blob/master/DeployYOLOmodel.py. 
 
 _____________________________________________________
 
