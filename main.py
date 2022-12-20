@@ -208,5 +208,5 @@ class Objectdetection:
         
         
 # Creates a new instance of class
-obj_1 = Objectdetection(video_index=1, model_file='Supergood2.pt')
+obj_1 = Objectdetection(video_index=0, model_file='Supergood2.pt')
 obj_1()
