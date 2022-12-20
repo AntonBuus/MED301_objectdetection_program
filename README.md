@@ -7,8 +7,10 @@ _____________________________________________________
 ## 1. The Project
 
 ## 2. Prerequisties 
+
   ### 2.1 - The environment
-    #### 2.1.1 Virtual Environment 
+  	2.1.1 Virtual Environment 
+	
   ### 2.2 - requirement.txt
 	
 ## 3. Run the Program 
@@ -26,37 +28,37 @@ The following section, will provide a guide on how to use the program
   
   To run the program, you must have a installation of Python 3.9.x or older. From our testing, Pytorch is not yet optimised for Python 3.10 and newer. If you have a new version of Python installed, we recommend creating a virtual environment
     
-    ##### 2.1.1 Virtual Environment 
-    To create a virtual environment in Python, follow these steps:
+    	2.1.1 Virtual Environment 
+		To create a virtual environment in Python, follow these steps:
     
-    ##### On MacOS:
+    	On MacOS:
     
-    ##### Step 1: 
-    Open the terminal and navigate to the directory where you want to create the virtual environment.
+    	Step 1: 
+    		Open the terminal and navigate to the directory where you want to create the virtual environment.
     
-    ##### Step 2:
-    Type the following into the terminal:
-    python3.9 -m venv env
+    	Step 2:
+    		Type the following into the terminal:
+    		**python3.9 -m venv env**
 
-    ##### Step 3:
-    To activate the virtual Environment run the following command:
-    source env/bin/activate
+    	Step 3:
+    		To activate the virtual Environment run the following command:
+    		**source env/bin/activate**
     
-    ##### On Windows:
+    	On Windows:
     
-    ##### Step 1:
-    Open the command prompt and navigate to the directory where you want to create the virtual environment.
+    	Step 1:
+    		Open the command prompt and navigate to the directory where you want to create the virtual environment.
     
-    ##### Step 2:
-    Run the following command:
-    python -m venv env
+    	Step 2:
+    		Run the following command:
+    		**python -m venv env**
     
-    ##### Step 3:
-    Activate the virtual environment by running the following command:
-    env\Scripts\activate.bat
+    	Step 3:
+    		Activate the virtual environment by running the following command:
+   		**env\Scripts\activate.bat**
     
-    ##### NOTE: 
-    "env" described above is the name of the virtual environment. This can be adjusted to your preference. 
+    	NOTE: 
+    		**"env"** described above is the name of the virtual environment. This can be adjusted to your preference. 
     
   ## 2.2 Requirement.txt
   Once you have the right installation of Python, either be on the system or in a virtual environment, you need to install the required packages to run the program. 
