@@ -30,10 +30,10 @@ The following section, will provide a guide on how to use the program
 
   ## 2.1 The environment
   
-  To run the program, you must have a installation of Python 3.9.x or older. From our testing, Pytorch is not yet optimised for Python 3.10 and newer. If you have a new version of Python installed, we recommend creating a virtual environment
+  To run the program, you must have a installation of Python 3.9.x or older. From our testing, Pytorch is not yet optimised for Python 3.10 and newer. If you have a new version of Python installed locally, we recommend creating a virtual environment
     
     	2.1.1 Virtual Environment 
-		To create a virtual environment in Python, follow these steps:
+		To create a virtual environment in Python, you must have the version of Python from which you want to create Virtual environment installed locally. Visit Pythons install to see your options. We recommend installing Python 3.9.x. Once that is done follow these steps:
     
     	On MacOS:
     
@@ -55,7 +55,7 @@ The following section, will provide a guide on how to use the program
     
     	Step 2:
     		Run the following command:
-    		**python -m venv env**
+    		**python3.9 -m venv env**
     
     	Step 3:
     		Activate the virtual environment by running the following command:
@@ -90,11 +90,17 @@ To run the program, run the **"main.py"** file.
 
 This can done through the terminal, by navigating to the the project directory and typing **"python3 main.py"**
 
+**NOTE**
+Ensure that your in the correct environment, if you have build a virtual environment
+
 or 
 
 Running the file from your editor of choice. 
 
 We recommend running it from the editor, as you have the option to decide which camera you want to use by adjusting **"video_index"**. 
+
+**NOTE**
+Make sure that your virtual environment is selected as the interpreter on in your editor. 
 
     
 
