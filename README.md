@@ -1,5 +1,5 @@
 # Interactive Digital Card Exhibit
-## by Group 301 on Medialogy 3. semester | Hamza Majid Qureshi, Gabriel C.D. Walløe, Malthe Hansen, Anton Buus Hansen, Amanda Leithoff Johansen 
+## by Group 301 on Medialogy 3. semester | Hamza Majid Qureshi, Gabriel C.D. Walløe, Malthe Hansen, Anton Buus Hansen, Amanda Leithoff Johansen and Frederik Ljungquist
 
 # Special thanks to Nicolai Nielsen!	
 The fundamentals of our code was inspired by **Nicolai Nielsen** and his project.
